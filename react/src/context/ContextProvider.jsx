@@ -12,12 +12,12 @@ export const ContextProvider = ({ children }) => {
     const [user, setUser] = useState({
         name: "John",
     });
-    const [token, _setToken] = useState(null);
+    const [token, _setToken] = useState(localStorage.getItem("ACCESS_TOKEN"));
 
-    const setToken = (newToken) => {
-        _setToken(newToken);
-        if (newToken) {
-            localStorage.setItem("ACCESS_TOKEN", newToken);
+    const setToken = (token) => {
+        _setToken(token);
+        if (token) {
+            localStorage.setItem("ACCESS_TOKEN", token);
         } else {
             localStorage.removeItem("ACCESS_TOKEN");
         }
@@ -41,4 +41,5 @@ ContextProvider.propTypes = {
     children: PropTypes.node.isRequired,
 };
 
-export const UseStateContext = () => useContext(StateContext);
+// eslint-disable-next-line react-refresh/only-export-components
+export const useStateContext = () => useContext(StateContext);

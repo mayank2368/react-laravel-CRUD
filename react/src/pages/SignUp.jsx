@@ -1,18 +1,18 @@
-import { useRef } from "react";
 import { Link } from "react-router-dom";
-import axiosClient from "../axios-client";
-import { UseStateContext } from "../context/ContextProvider";
+import { createRef, useState } from "react";
+import axiosClient from "../axios-client.js";
+import { useStateContext } from "../context/ContextProvider.jsx";
 
 export default function SignUp() {
-    const nameRef = useRef();
-    const emailRef = useRef();
-    const passwordRef = useRef();
-    const passwordConfirmationRef = useRef();
+    const nameRef = createRef();
+    const emailRef = createRef();
+    const passwordRef = createRef();
+    const passwordConfirmationRef = createRef();
+    const { setUser, setToken } = useStateContext();
+    const [errors, setErrors] = useState(null);
 
-    const { setUser, setToken } = UseStateContext();
-
-    const onSubmit = (e) => {
-        e.preventDefault();
+    const onSubmit = (ev) => {
+        ev.preventDefault();
 
         const payload = {
             name: nameRef.current.value,
@@ -21,43 +21,63 @@ export default function SignUp() {
             password_confirmation: passwordConfirmationRef.current.value,
         };
 
+        // const url = "/signup";
+
         axiosClient
             .post("/signup", payload)
             .then(({ data }) => {
-                setToken(data.token);
                 setUser(data.user);
+                setToken(data.token);
             })
+
             .catch((err) => {
                 const response = err.response;
-                if (response && response.status === 422)
-                    console.log(response.data.errors);
+                // console.log(process.env.TEST_VAR);
+                if (response && response.status === 422) {
+                    setErrors(response.data.errors);
+                }
             });
     };
+
     return (
         <div className="login-signup-form animated fadeInDown">
             <div className="form">
                 <form onSubmit={onSubmit}>
-                    <h1 className="title">Register a new account</h1>
+                    <h1 className="title">Signup for Free</h1>
+                    {errors && (
+                        <div className="alert">
+                            {Object.keys(errors).map((key) => (
+                                <p key={key}>{errors[key][0]}</p>
+                            ))}
+                        </div>
+                    )}
                     <input
                         ref={nameRef}
                         type="text"
-                        placeholder="First & Last name"
+                        placeholder="Full Name"
+                        autoComplete="username"
                     />
-                    <input ref={emailRef} type="email" placeholder="Email" />
+                    <input
+                        ref={emailRef}
+                        type="email"
+                        placeholder="Email Address"
+                        autoComplete="email"
+                    />
                     <input
                         ref={passwordRef}
                         type="password"
                         placeholder="Password"
+                        autoComplete="current-password"
                     />
                     <input
                         ref={passwordConfirmationRef}
                         type="password"
-                        placeholder="Re-enter password"
+                        placeholder="Repeat Password"
+                        autoComplete="repeat-password"
                     />
-                    <button className="btn btn-block">Register</button>
+                    <button className="btn btn-block">Signup</button>
                     <p className="message">
-                        Already have an account?{" "}
-                        <Link to="/login">Login here!</Link>
+                        Already registered? <Link to="/login">Sign In</Link>
                     </p>
                 </form>
             </div>

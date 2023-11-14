@@ -6,12 +6,13 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\SignupRequest;
 use App\Models\User;
+use http\Env\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
-    public function register(SignupRequest $request)
+    public function signup(SignupRequest $request)
     {
         $data = $request->validated();
         /** @var \App\Models\User $user */
@@ -22,7 +23,6 @@ class AuthController extends Controller
         ]);
 
         $token = $user->createToken('main')->plainTextToken;
-
         return response(compact('user', 'token'));
     }
 
@@ -31,23 +31,21 @@ class AuthController extends Controller
         $credentials = $request->validated();
         if (!Auth::attempt($credentials)) {
             return response([
-                'message' => 'Provided email address or password is incorrect'
-            ]);
+                'message' => 'Provided email or password is incorrect'
+            ], 422);
         }
 
-        /** @var User $user */
+        /** @var \App\Models\User $user */
         $user = Auth::user();
         $token = $user->createToken('main')->plainTextToken;
         return response(compact('user', 'token'));
-
-
     }
 
     public function logout(Request $request)
     {
-        /** @var User $user */
+        /** @var \App\Models\User $user */
         $user = $request->user();
         $user->currentAccessToken()->delete();
-        return response('', status: 404);
+        return response('', 204);
     }
 }

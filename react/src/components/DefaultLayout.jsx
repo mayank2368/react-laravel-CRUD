@@ -1,8 +1,8 @@
 import { Link, Navigate, Outlet } from "react-router-dom";
-import { UseStateContext } from "../context/ContextProvider";
+import { useStateContext } from "../context/ContextProvider";
 
 export default function DefaultLayout() {
-    const { user, token } = UseStateContext();
+    const { user, token } = useStateContext();
     if (!token) {
         return <Navigate to="/login" />;
     }

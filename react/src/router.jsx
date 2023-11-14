@@ -1,7 +1,7 @@
 import { Navigate, createBrowserRouter } from "react-router-dom";
-import Login from "./pages/login";
-import SignUp from "./pages/signUp";
-import Users from "./pages/users";
+import Login from "./pages/Login";
+import SignUp from "./pages/SignUp";
+import Users from "./pages/Users";
 import DefaultLayout from "./components/DefaultLayout";
 import GuestLayout from "./components/GuestLayout";
 import NotFound from "./pages/NotFound";
@@ -9,7 +9,7 @@ import Dashboard from "./pages/Dashboard";
 
 const router = createBrowserRouter([
     {
-        parth: "/",
+        path: "/",
         element: <DefaultLayout />,
         children: [
             {
@@ -27,7 +27,7 @@ const router = createBrowserRouter([
         ],
     },
     {
-        parth: "guestlayout",
+        path: "/",
         element: <GuestLayout />,
         children: [
             {

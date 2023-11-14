@@ -1,11 +1,13 @@
 import axios from "axios";
+//import { useStateContext } from "./context/ContextProvider.jsx";
+var url = `http://localhost:8000`;
 
 const axiosClient = axios.create({
-    baseURL: `${import.meta.env.VITE_API_BASE_URL}/api`,
+    baseURL: `${url}/api`,
 });
 
 axiosClient.interceptors.request.use((config) => {
-    const token = localStorage.get("ACCESS_TOKEN");
+    const token = localStorage.getItem("ACCESS_TOKEN");
     config.headers.Authorization = `Bearer ${token}`;
     return config;
 });
@@ -18,7 +20,11 @@ axiosClient.interceptors.response.use(
         const { response } = error;
         if (response.status === 401) {
             localStorage.removeItem("ACCESS_TOKEN");
+            // window.location.reload();
+        } else if (response.status === 404) {
+            //Show not found
         }
+
         throw error;
     }
 );
