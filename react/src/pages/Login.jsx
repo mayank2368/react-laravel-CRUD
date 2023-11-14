@@ -1,13 +1,14 @@
 import { Link } from "react-router-dom";
-import axiosClient from "../axios-client";
-import { createRef, useState } from "react";
-import { useStateContext } from "../context/ContextProvider";
+import axiosClient from "../axios-client.js";
+import { createRef } from "react";
+import { useStateContext } from "../context/ContextProvider.jsx";
+import { useState } from "react";
 
 export default function Login() {
     const emailRef = createRef();
     const passwordRef = createRef();
-    const { setUser, setToken } = useStateContext;
-    const [errors, setErrors] = useState(null);
+    const { setUser, setToken } = useStateContext();
+    const [message, setMessage] = useState(null);
 
     const onSubmit = (ev) => {
         ev.preventDefault();
@@ -16,7 +17,6 @@ export default function Login() {
             email: emailRef.current.value,
             password: passwordRef.current.value,
         };
-        setErrors(null);
         axiosClient
             .post("/login", payload)
             .then(({ data }) => {
@@ -26,13 +26,7 @@ export default function Login() {
             .catch((err) => {
                 const response = err.response;
                 if (response && response.status === 422) {
-                    if (response.data.errors) {
-                        setErrors(response.data.errors);
-                    } else {
-                        setErrors({
-                            email: [response.data.message],
-                        });
-                    }
+                    setMessage(response.data.message);
                 }
             });
     };
@@ -42,13 +36,13 @@ export default function Login() {
             <div className="form">
                 <form onSubmit={onSubmit}>
                     <h1 className="title">Login into your account</h1>
-                    {errors && (
+
+                    {message && (
                         <div className="alert">
-                            {Object.keys(errors).map((key) => {
-                                <p key={key}>{errors[key][0]}</p>;
-                            })}
+                            <p>{message}</p>
                         </div>
                     )}
+
                     <input
                         ref={emailRef}
                         type="email"
