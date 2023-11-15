@@ -24,10 +24,12 @@ class UserController extends Controller
     public function store(StoreUserRequest $request)
     {
         $data = $request->validated();
-        $data["password"] = bcrypt($data["password"]);
+        $data['password'] = bcrypt($data['password']);
         $user = User::create($data);
-        return response(new UserResource($user), status: 201);
+
+        return response()->json(new UserResource($user), 201);
     }
+
 
     /**
      * Display the specified resource.
@@ -45,7 +47,7 @@ class UserController extends Controller
         $data = $request->validated();
 
         if (isset($data['password'])) {
-            $data['password']->bcr($data['password']);
+            $data['password']->bcrypt($data['password']);
         }
         $user->update($data);
         return new UserResource($user);
