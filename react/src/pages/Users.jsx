@@ -13,13 +13,19 @@ export default function Users() {
     }, []);
 
     const onDeleteClick = (user) => {
+        console.log("Delete button clicked");
         if (!window.confirm("Are you sure you want to delete this user?")) {
             return;
         }
-        axiosClient.delete(`/users/${user.id}`).then(() => {
-            setNotification("User was successfully deleted");
-            getUsers();
-        });
+
+        if (user.id !== undefined) {
+            axiosClient.delete(`/users/${user.id}`).then(() => {
+                setNotification("User was successfully deleted");
+                getUsers();
+            });
+        } else {
+            console.error("User ID is undefined:", user);
+        }
     };
 
     const getUsers = () => {

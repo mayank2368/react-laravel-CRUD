@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import axiosClient from "../axios-client";
 
 export default function DefaultLayout() {
-    const { user, token, setUser, setToken } = useStateContext();
+    const { user, token, setUser, setToken, notification } = useStateContext();
 
     useEffect(() => {
         axiosClient.get("/user").then(({ data }) => {
@@ -46,6 +46,8 @@ export default function DefaultLayout() {
                     <Outlet />
                 </main>
             </div>
+
+            {notification && <div className="notification">{notification}</div>}
         </div>
     );
 }
