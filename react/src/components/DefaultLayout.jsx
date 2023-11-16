@@ -29,13 +29,14 @@ export default function DefaultLayout() {
     return (
         <div id="defaultLayout">
             <aside>
-                <Link to="/dashboard">Dashboard</Link>
-                <Link to="/users">Users</Link>
+                <Link to="/users" style={{ fontWeight: "bold" }}>
+                    Users
+                </Link>
             </aside>
             <div className="content">
-                <header>
-                    <div>Header</div>
-                    <div>
+                <header className="dashboard">
+                    <div style={{ fontWeight: "bold" }}>Dashboard </div>
+                    <div style={{ fontWeight: "bold" }}>
                         {user.name}
                         <a href="#" onClick={onLogout} className="btn-logout">
                             Logout

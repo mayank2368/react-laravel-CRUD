@@ -74,7 +74,7 @@ input:focus {
 .btn-logout {
     text-decoration: none;
     padding: 0.75rem 1.5rem;
-    color: #212121;
+    color: #ff0d0d;
     transition: all 0.3s;
     border-radius: 6px;
 }
@@ -241,3 +241,4 @@ table > tbody > tr > td {
         transform: translateY(0);
     }
 }
+
